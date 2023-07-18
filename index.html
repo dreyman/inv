@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>?</title>
+    <style type="text/css">
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            background: #000;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .container {
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 {
+            color: #fff;
+        }
+
+        #title {
+            display: flex;
+        }
+
+        #title > p {
+            font-weight: bold;
+            color: #fff;
+            font-size: 6rem;
+            margin: 0 0.25rem;
+        }
+
+        #actions {
+            display: flex;
+            margin-top: 3rem;
+            justify-content: space-around;
+            space-between: 3rem;
+        }
+
+        #actions > button {
+            background: none;
+            border: none;
+            font-size: 6rem;
+            transition: transform 0.25s;
+        }
+
+        #actions > button:hover {
+            transform: scale(1.25);
+            transition: transform 0.25s;
+        }
+
+        .pity {
+            font-size: 6rem;
+            color: #fff;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="container">
+        <section id="title">
+        </section>
+        <section id="actions">
+            <button id="yes">👍</button>
+            <button id="no">👎</button>
+        </section>
+    </div>
+
+    <script type="text/javascript">
+        const urlParams = new URLSearchParams(window.location.search)
+        const invitePlayer = urlParams.get('player')
+
+        setTitle('CHESS?')
+
+        let container = document.querySelector('#title')
+        let letters = Array.from(container.children)
+        let intervals = []
+        letters.forEach(letter => {
+            let interval = setInterval(() => {
+                letter.style.color = '#'+(0x1000000+Math.random()*0xffffff).toString(16).substr(1,6)
+            }, 250)
+            intervals.push(interval)
+        })
+
+        let yes = document.getElementById('yes')
+        yes.addEventListener('click', event => {
+            let location = 'https://lichess.org/'
+            if (invitePlayer) location += `?user=${invitePlayer}#friend`
+            window.location = location 
+        })
+
+        let no = document.getElementById('no')
+        no.addEventListener('click', event => {
+            intervals.forEach(i => clearInterval(i))
+            document.querySelector('#actions').style.display = 'none'
+            document.querySelector('#title').innerHTML = '<h1 class="pity">That\'s a pity</h1>'
+        })
+
+        function setTitle(title) {
+            let parent = document.querySelector('#title')
+            parent.innerHTML = ''
+            for (let i = 0; i < title.length; i++) {
+                parent.innerHTML += '<p>' + title.charAt(i) + '</p>'
+            }
+        }
+    </script>
+  </body>
+</html>
